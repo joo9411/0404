@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--아이콘폰트 주소--> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>01 제이쿼리 문서객체조작(위치변경)</title>
+    <style>
+        ul{border: 3px solid #f00;}
+        .list01{font-size: 30px;color: #00f;}
+
+        .modal{
+            width: 100%;height: 100%;
+            position: fixed;top: 0px;left: 0px;
+            background: rgba(0,0,0,.8);
+        }
+        .m_box{
+            width: 324px;height: 688px;
+            margin: auto;
+            transform: translateY();
+        }
+        .m_box p{
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+        }
+        .m_box a{color: #fff;}
+    </style>
+    <!--제이쿼리 라이브러리 연결하기-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="./script/jquery.cookie.js"></script>
+    <script>
+        $(function(){
+            //1.append
+            $('#btn01').click(function(){
+                $('ul').append('<li class="list01">내용추가</li>')
+            });
+        
+
+            //2.prepend
+            $('#btn02').click(function(){
+                $('ul').prepend('<li class="list01">내용추가</li>')
+            });
+
+            //3.after(바깥 - 뒤)
+            $('#btn03').click(function(){
+                $('ul').after('<p>내용추가하기</p>');
+            });
+
+            //4.before(바깥 - 앞)
+            $('#btn04').click(function(){
+                $('ul').before('<p>내용추가하기</p>');
+            });
+
+            const modal = '<div class="modal"><div class="m_box"><img src="./images/popup.jpg" alt=""><p><label for="ch">오늘하루 열지않음</label><a href="#" title="" class="c_btn">닫기</a></p></div></div>';
+            
+            //body태그 안쪽의 맨뒤에 내용을 추가한다.
+            $('body').append(modal);
+
+            //쿠키
+            const $ex = $('#ch'); //체크박스를 변수에 담는다.
+            //1.만약 쿠키가 현재 브라우저에 존재한다면 모달을 나오지 않게 숨긴다.
+            if($.cookie('popup')=='none'){
+                $('.modal'),hide();
+            }
+
+            //2. 사용자가 오늘하루 열지않음 버튼을 클릭하면 popup함수를 호출하여 쿠키를 생성
+            $('.modal label').click(function(){
+                $.cookie('popup','none',{expires:1,path:'/'}); //쿠키를 생성
+                $('.modal').hide();
+            });
+            //3.닫기 버튼을 클릭하면 모달 숨기기
+            $('.modal a').click(function(){
+                $('.modal').hide();
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>01제이쿼리 문서객체조작(위치변경) - 내용 추가메서드</h2>
+    <p>DOM(문서객체모델)에서 문서안의 요소에 내용을 추가하거나 삭제할 수  있다.</p>
+    <ul>
+        <li>append(); - 사용자가 선택한 요소를 기준으로 안쪽으로 맨 뒤 쪽에 내용을 추가하고자 할 때 사용</li>
+        <li>prepend(): - 사용자가 선택한 요소를 기준으로 안쪽으로 맨 앞쪽에 내용을 추가하고자 할 때 사용</li>
+        <li>after(); = 사용자가 선택한 요소의 바깥으로 맨 뒤 쪽에 내용을 추가하고자 할 때 사용</li>
+        <li>before(); = 사용자가 선택한 요소의 바깥으로 맨앞쪽에 내용을 추가하고자 할 때 사용</li>
+    </ul>
+
+    <input type="button" value="append()실행하기" id="btn01">
+    <input type="button" value="prepend()실행하기" id="btn02">
+    <input type="button" value="after()실행하기" id="btn03">
+    <input type="button" value="before()실행하기" id="btn04">
+
+    <p>insertAfter(), insertBefore()를 사용하면 A라는 요소의 앞쪽에 B라는 요소를 배치할 수 있고,
+    B라는 요소의 뒤쪽에 A요소를 배치할 수 있다. after(),before()메소드와 기능은 같지만 사용법이 다르다.
+    </p>
+    <pre>
+        예)
+        $('A').after('B'); - A요소의 바깥쪽으로 뒤에 B내용을 추가한다.
+        $('B').insertBefore('A'); - A요소의 바깥쪽으로 뒤에 B를 배치한다.
+    </pre>
+
+    <h3>문서객체조작 - 내용 삭제 메서드(remove)</h3>
+    <p>사용자가 선택한 요소의 내용만 삭제하거나, 아예 태그요소를 삭제할 수도 있다.</p>
+    <ol>
+        <li>remove(); - 사용자가 선택한 요소를 제거</li>
+        <li>empty(); - 사용자가 선택한 요소의 내용만 제거</li>
+    </ol>
+
+    <div id="box01">
+        아래 remove버튼을 클릭하면 현재 이 박스요소가 제거됩니다.<br>
+        아래 empty버튼을 클릭하면 현재 이박스 요소의 내용만 제거됩니다.
+    </div>
+
+    <input type="button" value="remove()메서드 실행하기" id="btn05"> 
+    <input type="button" value="empty()메서드 실행하기" id="btn06"> 
+    <input type="button" value="삭제된 박스 다시 살리기" id="btn07">
+
+    <img src="./images/before_after.jpg" alt="참고자료">
+
+    <style>
+        #box01{border: 3px solid #f00;background: #ff0;width: 500px;height: 300px;}
+    </style>
+    <script>
+        $(function(){
+        $('#btn05').click(function(){ 
+            $('#box01').remove(); //태그전체를 삭제
+        });
+
+        $('#btn06').click(function(){
+            $('#box01').empty(); //내용만삭제
+        });
+
+        const con01 = '<div id="box01">아래 remove버튼을 클릭하면 현재 이 박스요소가 제거됩니다.<br>아래 empty버튼을 클릭하면 현재 이박스 요소의 내용만제거됩니다.</div>' 
+
+        $('#btn07').click(function(){
+            $('ol').after(con01);
+        });
+        });
+    </script>
+</body>
+</html>
